@@ -8,6 +8,10 @@ public class SolutionGenerator {
 		
 		for(int path=2;path<13;path += 2) {
 			//write path length to each of the three tables
+			String strPath = new Integer(path).toString();
+			statesExpanded.fill(strPath);
+			statesGenerated.fill(strPath);
+			statesInMemory.fill(strPath);
 			
 			//overwrite totals to store data for next path length
 			totals = new ArrayList<>(18);
@@ -78,5 +82,14 @@ public class SolutionGenerator {
 				else statesInMemory.fill(new Double(sum/100d).toString());
 			}
 		}
+		
+		String[] headings = { "L","UCS","A*1","A*2","ID","IDA*1","IDA*2"};
+		statesExpanded.setHeadings(headings);
+		statesGenerated.setHeadings(headings);
+		statesInMemory.setHeadings(headings);
+		
+		statesExpanded.print();
+		statesGenerated.print();
+		statesInMemory.print();
 	}
 }

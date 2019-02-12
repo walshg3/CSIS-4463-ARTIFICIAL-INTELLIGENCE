@@ -34,4 +34,24 @@ public class Table {
 		filled ++;
 	}
 	
+	public void print() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(title);
+		sb.append('\n');
+		for(String heading : headings) {
+			sb.append(String.format("%15.10s", heading));
+			//sb.append("\t\t");
+		}
+		sb.append('\n');
+		for(String[] rows : values) {
+			for(String val : rows) {
+				sb.append(String.format("%15.10s", val));
+				//sb.append("\t\t");
+			}
+			sb.append('\n');
+		}
+		
+		System.out.print(sb.toString());
+	}
+	
 }
