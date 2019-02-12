@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import csis4463.*;
 public class SolutionGenerator {
 	public static void main(String[] args) {
 		ArrayList<ArrayList<Long>> totals;
