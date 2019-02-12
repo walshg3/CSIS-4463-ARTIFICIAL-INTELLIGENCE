@@ -21,6 +21,9 @@ public class Table {
 		this.title = title;
 	}
 	
+	/**
+	 * set value for the first row of table 
+	 */
 	public void setHeadings(String[] headings) {
 		if(headings.length == width) {
 			this.headings = headings;
@@ -29,31 +32,36 @@ public class Table {
 		}
 	}
 	
+	/**
+	 * fill next cell in table in the order left --> right,top --> bottom
+	 */
 	public void fill(String val) {
 		values[filled/width][filled%width] = val;
 		filled ++;
 	}
 	
-	public void print() {
+	/**
+	 * align elements to collumn and return table as single string
+	 * @return string representation of rows seperated by newlines
+	 */
+	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(title);
 		sb.append('\n');
 		sb.append(String.format("%2s", headings[0]));
 		for(int i =1;i<width;i++) {
 			sb.append(String.format("%15s", headings[i]));
-			//sb.append("\t\t");
 		}
 		sb.append('\n');
 		for(String[] rows : values) {
 			sb.append(String.format("%2s", rows[0]));
 			for(int i =1;i<width;i++) {
 				sb.append(String.format("%15s", rows[i]));
-				//sb.append("\t\t");
 			}
 			sb.append('\n');
 		}
 		
-		System.out.print(sb.toString());
+		return (sb.toString());
 	}
 	
 }

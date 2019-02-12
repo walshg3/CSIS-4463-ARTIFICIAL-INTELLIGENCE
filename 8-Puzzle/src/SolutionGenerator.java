@@ -21,19 +21,19 @@ public class SolutionGenerator {
 			}
 			/*
 			 * data in totals :
-			 * 0:ucs states expanded	1:ucs states generated		2:ucs states in memory
-			 * 0:a*1 states expanded	1:a*1 states generated		2:a*1 states in memory
-			 * 0:a*2 states expanded	1:a*2 states generated		2:a*2 states in memory
-			 * 0:id states expanded		1:id states generated		2:id states in memory
-			 * 0:ida*1 states expanded	1:ida*1 states generated	2:ida*1 states in memory
-			 * 0:ida*2 states expanded	1:ida*2 states generated	2:ida*2 states in memory
+			 *  0:ucs states expanded		 1:ucs states generated		 2:ucs states in memory
+			 *  3:a*1 states expanded		 4:a*1 states generated		 5:a*1 states in memory
+			 *  6:a*2 states expanded		 7:a*2 states generated		 8:a*2 states in memory
+			 *  9:id states expanded		10:id states generated		11:id states in memory
+			 * 12:ida*1 states expanded		13:ida*1 states generated	14:ida*1 states in memory
+			 * 15:ida*2 states expanded		16:ida*2 states generated	17:ida*2 states in memory
 			 * 
 			 */
 			
 			for(int i=0;i<100;i++) {
 				/*
 				 * generate a puzzle with optimal path length of size path
-				 * generate 6 solutions using each algorithm
+				 * generate a solutions using each algorithm
 				 * push data from solution into the corresponding list 
 				 */
 				SlidingTilePuzzle stp = new SlidingTilePuzzle(8,8,path);
@@ -69,15 +69,13 @@ public class SolutionGenerator {
 				totals.get(17).add((long)solution.getNumberOfStatesInMemory());
 			}
 
-			/*
-			 * compute averages and write to table
-			 */
-			for(int i=0;i<totals.size();i++) {
+			for(int i=0;i<totals.size();i++) { //for each list
 				long sum = 0;
-				for(Long solutionData : totals.get(i)) {
-					sum += solutionData;
+				for(Long solutionData : totals.get(i)) { // for each peice of data
+					sum += solutionData; //add to sum
 				}
-				//TODO: write to table
+
+				//write average to table
 				if(i%3==0)statesExpanded.fill(new Double(sum/100d).toString());
 				else if(i%3==1)statesGenerated.fill(new Double(sum/100d).toString());
 				else statesInMemory.fill(new Double(sum/100d).toString());
@@ -89,8 +87,8 @@ public class SolutionGenerator {
 		statesGenerated.setHeadings(headings);
 		statesInMemory.setHeadings(headings);
 		
-		statesExpanded.print();
-		statesGenerated.print();
-		statesInMemory.print();
+		System.out.print(statesExpanded);
+		System.out.print(statesGenerated);
+		System.out.print(statesInMemory);
 	}
 }
