@@ -38,14 +38,16 @@ public class Table {
 		StringBuilder sb = new StringBuilder();
 		sb.append(title);
 		sb.append('\n');
-		for(String heading : headings) {
-			sb.append(String.format("%15.10s", heading));
+		sb.append(String.format("%2s", headings[0]));
+		for(int i =1;i<width;i++) {
+			sb.append(String.format("%15s", headings[i]));
 			//sb.append("\t\t");
 		}
 		sb.append('\n');
 		for(String[] rows : values) {
-			for(String val : rows) {
-				sb.append(String.format("%15.10s", val));
+			sb.append(String.format("%2s", rows[0]));
+			for(int i =1;i<width;i++) {
+				sb.append(String.format("%15s", rows[i]));
 				//sb.append("\t\t");
 			}
 			sb.append('\n');
