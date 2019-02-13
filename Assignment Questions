@@ -1,0 +1,20 @@
+6) Answer the following questions:
+
+6A) Describe in words the relative pattern of number of expanded states for UCS and A* 
+    with the two different heuristics.
+
+6B)	Why do we find that pattern?
+
+6C) Describe in words the relative pattern of number of expanded states for Iterative Deepening 
+    and IDA* with the two different heuristics.
+	
+6D) Why do we find that pattern? And how does that pattern compare to what you saw in 6A and 6B?  
+
+6E) Describe the memory usage (max states in memory) that you observed for UCS, and the
+    two variations of A*.
+	
+6F) Describe the relative memory usage (max states in memory) that you observed for Iterative Deepening 
+    and IDA* with the two different heuristics.
+	
+6G) Explain the memory usage that you observed for the three iterative deepening algorithms (IDA* and ID) 
+    versus the others (UCS and A*).
