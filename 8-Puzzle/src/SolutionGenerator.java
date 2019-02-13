@@ -35,8 +35,9 @@ public class SolutionGenerator {
 				 * generate a puzzle with optimal path length of size path
 				 * generate a solutions using each algorithm
 				 * push data from solution into the corresponding list 
+				 * for an 8 puzzle we need a 3,3 not 8,8 which was causing problems with runtime.
 				 */
-				SlidingTilePuzzle stp = new SlidingTilePuzzle(8,8,path);
+				SlidingTilePuzzle stp = new SlidingTilePuzzle(3,3,path);
 
 				PuzzleSolution solution = SlidingTilePuzzleSolver.uniformCostSearch(stp);
 				totals.get(0).add((long)solution.getNumberOfStatesExpanded());
