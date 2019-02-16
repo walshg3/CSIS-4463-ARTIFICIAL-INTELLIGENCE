@@ -13,8 +13,14 @@
 6E) Describe the memory usage (max states in memory) that you observed for UCS, and the
     two variations of A*.
 	
+	The memory cost of UCS is growing in respect to optimal path length much faster than either implementation of A*. A* using the misplaced tiles heuristic is  growing slightly faster than A* using Manhattan distance as the heuristic. Any implementation of A* with an admissible heuristic will be better than UCS in this case because the cost of every successor is one, so UCS ends up being the same as breadth first search.
+	
 6F) Describe the relative memory usage (max states in memory) that you observed for Iterative Deepening 
     and IDA* with the two different heuristics.
 	
+	ID and IDA* memory cost is identical, always storing n states in memory. Because ID and IDA* are implementations of depth first search, they only store their current paths in memory
+	
 6G) Explain the memory usage that you observed for the three iterative deepening algorithms (IDA* and ID) 
     versus the others (UCS and A*).
+    
+    UCS and A* grow at O(b^k) where b=branching factor and k=length of the optimal path. ID and IDA* grow at O(k) 
