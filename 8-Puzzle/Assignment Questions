@@ -1,4 +1,4 @@
-6) Answer the following questions:
+﻿6) Answer the following questions:
 
 6A) Describe in words the relative pattern of number of expanded states for UCS and A* with the two different heuristics.
         USC is growing at a much quicker rate compaired to the A*'s however A* 
@@ -6,8 +6,7 @@
         A* with manhattan distance heuristic 
 
 
-6B)	Why do we find that pattern?
-    USC is not using heuristics so the states expanded are going to be much higher because UCS expands nodes with the same cost in the priority queue. 
+6B)	Why do we find that pattern? USC is not using heuristics so the states expanded are going to be much higher because UCS expands nodes with the same cost in the priority queue. 
     A* with misplaced tiles algorithm grows slower than manhattan distance because of the heuristic used. misplaced tiles only takes into account whether a tile is misplaced or not, but it doesn't take into account how far away that tile is from being correct where as the manhattan distance does.
 
 6C) Describe in words the relative pattern of number of expanded states for Iterative Deepening and IDA* with the two different heuristics.
@@ -20,14 +19,12 @@
 6E) Describe the memory usage (max states in memory) that you observed for UCS, and the
     two variations of A*.
 	
-	The memory cost of UCS is growing in respect to optimal path length much faster than either implementation of A*. A* using the misplaced tiles heuristic is growing slightly faster than A* using Manhattan distance as the heuristic. Any implementation of A* with an admissible heuristic will be better than UCS in this case because the cost of every successor is one, so UCS ends up being the same as breadth first search.
+	The memory cost of UCS is growing in respect to optimal path length much faster than either implementation of A*. A* using the misplaced tiles heuristic is growing slightly faster than A* using Manhattan distance as the heuristic. Any implementation of A* with an admissible heuristic will be better than UCS in this case because the cost of every successor is one, so UCS ends up being the same as breadth first search. Since the only difference between the two A* implementations is the heuristic used we can say that Manhattan distance is a better heuristic than total misplaced tiles.
 	
-6F) Describe the relative memory usage (max states in memory) that you observed for Iterative Deepening 
-    and IDA* with the two different heuristics.
+6F) Describe the relative memory usage (max states in memory) that you observed for Iterative Deepening and IDA* with the two different heuristics.
 	
 	ID and IDA* memory cost is identical, always storing n states in memory. Because ID and IDA* are implementations of depth first search, they only store their current paths in memory
 	
-6G) Explain the memory usage that you observed for the three iterative deepening algorithms (IDA* and ID) 
-    versus the others (UCS and A*).
+6G) Explain the memory usage that you observed for the three iterative deepening algorithms (IDA* and ID) versus the others (UCS and A*).
     
-    UCS and A* grow at O(b^k) where b=branching factor and k=length of the optimal path. ID and IDA* grow at O(k) 
+    UCS and A* grow at O(b^k) where b=branching factor and k=length of the optimal path. ID and IDA* grow at O(k). Because ID and IDA* use DFS they only store their current path in memory which makes them use dramatically less memory
