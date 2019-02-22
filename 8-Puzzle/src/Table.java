@@ -1,4 +1,4 @@
-
+//Brian Fox and Greg Walsh
 public class Table {
 	private int width;
 	private int height;

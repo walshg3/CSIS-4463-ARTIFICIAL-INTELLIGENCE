@@ -1,3 +1,4 @@
+Greg Walsh and Brian Fox
 Number of States Expanded
  L            UCS            A*1            A*2             ID          IDA*1          IDA*2
  2            6.0            2.0            2.0           9.16            4.0            4.0

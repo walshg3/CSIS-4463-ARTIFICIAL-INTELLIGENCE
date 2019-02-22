@@ -1,3 +1,4 @@
+//Brian Fox and Greg Walsh
 import java.util.ArrayList;
 import csis4463.*;
 public class SolutionGenerator {
