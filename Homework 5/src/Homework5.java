@@ -1,5 +1,11 @@
 import csis4463.*;
+import sun.invoke.empty.Empty;
+
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashSet;
+
+import org.graalvm.compiler.graph.Node.Successor;
 
 /**
  * For this assignment, you will need the puzzle.jar file and its documentation (docs.zip) 
@@ -29,6 +35,22 @@ import java.util.ArrayList;
  * @author Your Name Goes here.
  *
  */
+
+
+
+ /*
+	Sudo Code:
+		PQ.pop
+		if isGoalState
+			return path
+		store HashValue in HT
+	for each succesor 
+		if in PQ or not in HT
+			calculate priority
+			push to PQ
+
+
+ */
 public class Homework5 {
 	
 	/**
@@ -38,6 +60,42 @@ public class Homework5 {
 	 */
 	public ArrayList<SlidingTilePuzzle> solver(SlidingTilePuzzle start) {
 		// this return here temporarily so this compiles.
-		return null;
+
+		// Create PQ and HashSet
+		MinHeapPQ<SlidingTilePuzzleCurrent> PQ = new MinHeapPQ<>();
+		HashSet<String> HS = new HashSet<>();
+		
+		SlidingTilePuzzleCurrent initial = new SlidingTilePuzzleCurrent(start);
+		//PQ.pop
+		PQ.offer(initial,0);
+		while (!PQ.isEmpty()){
+			//pop PQ
+			SlidingTilePuzzleCurrent current = PQ.poll();
+			/*
+			if isGoalState
+			return path
+			*/
+			if (current.isGoalState()){
+				return current.getPath();
+			}
+			//store HashValue in HT
+			HS.add(current.getHashValue());
+			/*
+			for each succesor 
+			if in PQ or not in HT
+			calculate priority
+			push to PQ
+			*/
+			for (SlidingTilePuzzleCurrent successsor : current.getSuccessors()) {
+				if (PQ.inPQ(successor) || !HS.contains(successor)){				
+					PQ.add(successsor,successsor.getPriority());
+				}
+			}
+		}
+		
+		
+
+
+
 	}
 }
