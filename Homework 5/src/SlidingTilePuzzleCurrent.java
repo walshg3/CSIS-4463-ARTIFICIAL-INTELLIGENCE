@@ -22,7 +22,7 @@ public class SlidingTilePuzzleCurrent{
 	 */
 	private SlidingTilePuzzleCurrent(SlidingTilePuzzle stp, ArrayList<SlidingTilePuzzle> path){
 		this.stp = stp;
-		this.path = path;
+		this.path = new ArrayList<>(path);
 		path.add(stp);
 
 	}

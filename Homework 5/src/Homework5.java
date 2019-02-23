@@ -80,7 +80,7 @@ public class Homework5 {
 			push to PQ
 			*/
 			for (SlidingTilePuzzleCurrent successor : current.getSuccessors()) {
-				if (PQ.inPQ(successor) || !HS.contains(successor)){				
+				if (PQ.inPQ(successor) || !HS.contains(successor.getHashValue())){				
 					PQ.offer(successor,successor.getPriority());
 				}
 			}
