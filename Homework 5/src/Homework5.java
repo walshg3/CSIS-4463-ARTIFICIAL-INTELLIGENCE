@@ -81,9 +81,9 @@ public class Homework5 {
 			calculate priority
 			push to PQ
 			*/
-			for (SlidingTilePuzzleCurrent successsor : current.getSuccessors()) {
+			for (SlidingTilePuzzleCurrent successor : current.getSuccesors()) {
 				if (PQ.inPQ(successor) || !HS.contains(successor)){				
-					PQ.offer(successsor,successsor.getPriority());
+					PQ.offer(successor,successor.getPriority());
 				}
 			}
 		}
