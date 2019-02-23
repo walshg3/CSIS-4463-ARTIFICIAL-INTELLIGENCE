@@ -1,11 +1,6 @@
 import csis4463.*;
-import sun.invoke.empty.Empty;
-
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashSet;
-
-import org.graalvm.compiler.graph.Node.Successor;
 
 /**
  * For this assignment, you will need the puzzle.jar file and its documentation (docs.zip) 
@@ -88,7 +83,7 @@ public class Homework5 {
 			*/
 			for (SlidingTilePuzzleCurrent successsor : current.getSuccessors()) {
 				if (PQ.inPQ(successor) || !HS.contains(successor)){				
-					PQ.add(successsor,successsor.getPriority());
+					PQ.offer(successsor,successsor.getPriority());
 				}
 			}
 		}
