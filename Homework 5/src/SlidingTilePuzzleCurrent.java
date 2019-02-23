@@ -93,4 +93,8 @@ public class SlidingTilePuzzleCurrent{
 
 		return successors;
 	}
+
+	public String toString(){
+		return stp.toString();
+	}
 }
