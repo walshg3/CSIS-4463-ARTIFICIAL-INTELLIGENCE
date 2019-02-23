@@ -23,8 +23,25 @@ public class SlidingTilePuzzleCurrent{
 	}
 
 	public int getPriority(){
-		//TODO
-		return 0;
+		int manhattanDistance=0;
+
+		for(int i=0;i<stp.numRows();i++){
+			
+			for(int j=0;j<stp.numColumns();j++){
+				int tile = stp.getTile(i,j);
+				int adjusted = tile==0 ? 8 : tile-1;
+				int goalRow = adjusted/stp.numColumns();
+				int goalColumn = adjusted%stp.numColumns();
+				
+				manhattanDistance += Math.abs(i-goalRow) + Math.abs(j-goalColumn);
+				
+
+			}
+
+		}
+
+		return manhattanDistance+path.size()-1;
+		
 	}
 	
 	/**
