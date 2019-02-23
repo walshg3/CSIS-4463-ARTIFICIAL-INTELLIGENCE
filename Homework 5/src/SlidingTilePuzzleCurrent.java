@@ -14,7 +14,7 @@ public class SlidingTilePuzzleCurrent{
 	public SlidingTilePuzzleCurrent(SlidingTilePuzzle stp){
 		this.stp = stp;
 		this.path = new ArrayList<SlidingTilePuzzle>();
-		path.add(stp);
+		this.path.add(stp);
 	}	
 	
 	/*
@@ -23,7 +23,7 @@ public class SlidingTilePuzzleCurrent{
 	private SlidingTilePuzzleCurrent(SlidingTilePuzzle stp, ArrayList<SlidingTilePuzzle> path){
 		this.stp = stp;
 		this.path = new ArrayList<>(path);
-		path.add(stp);
+		this.path.add(stp);
 
 	}
 
@@ -54,7 +54,7 @@ public class SlidingTilePuzzleCurrent{
 
 		}
 		//less one to account for the current state being in path
-		return manhattanDistance+path.size()-1;
+		return manhattanDistance+path.size();
 		
 	}
 	

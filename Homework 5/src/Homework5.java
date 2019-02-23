@@ -1,6 +1,6 @@
 import csis4463.*;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.HashMap;
 
 /**
  * For this assignment, you will need the puzzle.jar file and its documentation (docs.zip) 
@@ -56,7 +56,7 @@ public class Homework5 {
 
 		// Create PQ and HashSet
 		MinHeapPQ<SlidingTilePuzzleCurrent> PQ = new MinHeapPQ<>();
-		HashSet<String> HS = new HashSet<>();
+		HashMap<String,Integer> HS = new HashMap<>();
 		
 		SlidingTilePuzzleCurrent initial = new SlidingTilePuzzleCurrent(start);
 		//PQ.pop
@@ -72,7 +72,7 @@ public class Homework5 {
 				return current.getPath();
 			}
 			//store HashValue in HT
-			HS.add(current.getHashValue());
+			HS.put(current.getHashValue(),current.getPriority());
 			/*
 			for each succesor 
 			if in PQ or not in HT
@@ -80,8 +80,13 @@ public class Homework5 {
 			push to PQ
 			*/
 			for (SlidingTilePuzzleCurrent successor : current.getSuccessors()) {
-				if (PQ.inPQ(successor) || !HS.contains(successor.getHashValue())){				
+				if (!HS.containsKey(successor.getHashValue())){				
 					PQ.offer(successor,successor.getPriority());
+				}else{
+					if(successor.getPriority()<HS.get(successor.getHashValue())){
+						HS.put(successor.getHashValue(),successor.getPriority());
+						PQ.offer(successor,successor.getPriority());
+					}
 				}
 			}
 		}
