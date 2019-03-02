@@ -30,6 +30,8 @@ public class Homework5Main {
 			ArrayList<SlidingTilePuzzle> path = test.solver(stp);
 			//check if the last state in path is the goal state
 			//and if the path length is the same as the optimal path length
+			//this will run a 3,3 puzzle for iterations from 1-31 to prove the path works
+			//for optimal path lengths 
 			if(path.size() != i+1 || !path.get(i).isGoalState()){
 				System.out.println("FAILED");
 			}
