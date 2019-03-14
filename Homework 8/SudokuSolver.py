@@ -17,9 +17,14 @@ class Constraint:
         #print(self.cells)
 
 
+
+
 # global list of constraints
 constraints = [Constraint(i) for i in range(18)]
 #global 2d array for puzzle
+
+puzzle = open("sudokus/s01a.txt")
+print(puzzle)
 
 #forward checking
 
@@ -32,4 +37,4 @@ def hey():
     #assign for dfs
     pass
 
-print(constraints[0].availability_list)
+#print(constraints[0].availability_list)
