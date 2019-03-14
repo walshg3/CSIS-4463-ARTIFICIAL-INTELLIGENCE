@@ -22,9 +22,17 @@ class Constraint:
 # global list of constraints
 constraints = [Constraint(i) for i in range(18)]
 #global 2d array for puzzle
-
+puzzlelist= []
 puzzle = open("sudokus/s01a.txt")
-print(puzzle)
+for row in puzzle:
+    puzzlelist.append(row.split())
+puzzle.close()
+#print(puzzlelist)
+#remove the close file []
+puzzlelist = puzzlelist[:9]
+print(puzzlelist)
+
+#print(puzzle)
 
 #forward checking
 
