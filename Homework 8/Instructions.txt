@@ -1,0 +1,20 @@
+For this assignment, you are allowed to work either by yourself, or in a group of 2, or in a group of 3.
+
+In this assignment, you will be implementing a solver for constraint satisfaction problems, specifically Sudoku.  Implement, in either Java or Python 3, a Sudoku puzzle solver.  If you use Python, it must be Python 3 (no Python 2 programs).  You can use any of the CSP search techniques that we saw in class, and/or others covered in the textbook.  
+
+Your program should request from the user the name of a text file that contains the puzzle to solve.  It should then solve it, and output the solution that it finds. 
+
+You can find puzzles for testing at this link: http://lipas.uwasa.fi/~timan/sudoku/  These are puzzles that have been used in the experiments of a few research papers.  The first table, lists the individual files with their difficulty level.  Note that the puzzles originated with different people, which is why there are different names for the difficulty levels.  Difficulty ratings 1 through 5 go from easy (1) through difficult (5).  Difficulty ratings E, C, D, SD go from easy (E) to hard (SD) [I don't know what the abbreviations are, but I'm guessing E for easy, D for difficulty, and perhaps SD for super-difficult.  No guess for C.]  There's then Easy, Medium, Hard.  And then one last group GA-E, GA-M, GA-H are again easy, medium, and hard.
+
+The file format is rather straight forward to parse.  Each text file has 9 rows of integers.  A number from 1 through 9 means that number is in that cell to start with (you can't change those).  A 0 is used to indicate an initially blank cell.  The 0 values correspond to the variables you need to assign values to.
+
+Output from your program should just be 9 rows of integers, 9 values in each row, either space or tab delimited to make it easy to read.
+
+I've attached a zip file of all of the puzzles in case the link above goes down.
+
+Grading:
+
+If your solver can consistently correctly solve the medium difficulty instances (difficulty ratings: 3, C, Medium, GA-M) then your grade will be someplace in the interval [80, 100].
+If your solver can consistently correctly solve the easy difficulty instances (difficulty ratings: 1, 2, E, Easy, GA-E), but fails to correctly solve medium difficulty puzzles, then your grade will be someplace in the interval [70, 90].
+If your solver fails to solve easy difficulty puzzles, or inconsistently solves them (e.g., sometimes correct, something incorrect, sometimes excessively long runtime), then your grade will be someplace in the interval [0, 70] depending upon the severity of mistakes in code.  E.g., Sometimes correctly solving would likely have a higher grade then never correctly solving.
+If your code doesn't compile (Java) or results in syntax errors from the Python interpreter, then your grade will be someplace in the interval [0, 60].
