@@ -26,19 +26,26 @@ constraints = [Constraint(i) for i in range(18)]
 puzzlelist= []
 puzzle = open("sudokus/s01a.txt")
 for row in puzzle:
-    puzzlelist.append(row.split())
+    puzzlelist.append([int(cell) for cell in row.split()])
 puzzle.close()
 #print(puzzlelist)
 #remove the close file []
 puzzlelist = puzzlelist[:9]
-#print(puzzlelist)
 
 #forward checking
+def forward_check(constraint,index,value):
+    newlist=[]
+    for option in constraint.availability_list:
+        if option[index]==value:
+            #constraint.availability_list.remove(option)
+            newlist.append(option)
+    constraint.availability_list = newlist
 
 for i,row in enumerate(puzzlelist):
     for j,cell in enumerate(row):
-        forward_check(constraints[i],cell)
-        forward_check(constraints[j+9],cell)
+        if cell != 0:
+            forward_check(constraints[i],j,cell)
+            forward_check(constraints[j+9],i,cell)
 
 #DFS
 def hey():
@@ -49,4 +56,6 @@ def hey():
     #assign for dfs
     pass
 
-#print(constraints[0].availability_list)
+for i in range(18):
+    print(len(constraints[i].availability_list))
+print(constraints[16].availability_list)
