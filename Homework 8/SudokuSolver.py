@@ -34,7 +34,7 @@ class BoardState:
             self.constraints = [Constraint(i) for i in range(18)]
 
             self.puzzlelist= []
-            puzzle = open("sudokus/s01a.txt")
+            puzzle = open("sudokus/s02a.txt")
             for row in puzzle:
                 self.puzzlelist.append([int(cell) for cell in row.split()])
             self.puzzlelist = self.puzzlelist[:9]
@@ -95,9 +95,9 @@ def propogate(board):
         if len(board.constraints[row].availability_list)==0:
             return 0
         changed = _propogate(board.constraints[column+9],row,availability) or changed
-        if len(board.constraints[column+9].availability_list)==1:
+        if len(board.constraints[column+9].availability_list)==0:
             return 0
-    print(changed)
+    
     if changed:
         return propogate(board)
 #DFS
@@ -111,6 +111,7 @@ def visit(board,index):
     if(index == 81):
         return board
     for value in board.get_availability_list(index):
+        print("-----")
         print(index)
         print(value)
         nextboard = board.copy()
@@ -122,6 +123,8 @@ def visit(board,index):
 
 
 board = BoardState()
+forward_check(board)
+print(board.get_availability_list(1))
 '''
 forward_check(board)
 for i in range(18):
@@ -131,4 +134,3 @@ for i in range(18):
     print(len(board.constraints[i].availability_list))
 '''
 print(visit(board,0).puzzlelist)
-
