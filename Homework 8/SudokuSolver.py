@@ -33,7 +33,7 @@ puzzle.close()
 puzzlelist = puzzlelist[:9]
 
 #forward checking
-def forward_check(constraint,index,value):
+def _forward_check(constraint,index,value):
     newlist=[]
     for option in constraint.availability_list:
         if option[index]==value:
@@ -41,11 +41,15 @@ def forward_check(constraint,index,value):
             newlist.append(option)
     constraint.availability_list = newlist
 
-for i,row in enumerate(puzzlelist):
-    for j,cell in enumerate(row):
-        if cell != 0:
-            forward_check(constraints[i],j,cell)
-            forward_check(constraints[j+9],i,cell)
+def forward_check():
+    for i,row in enumerate(puzzlelist):
+        for j,cell in enumerate(row):
+            if cell != 0:
+                if not len(constraints[i])==1:
+                    _forward_check(constraints[i],j,cell)
+                if not len(constraints[i])==1:
+                    _forward_check(constraints[j+9],i,cell)
+
 
 #DFS
 def hey():
