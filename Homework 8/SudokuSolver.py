@@ -2,7 +2,7 @@
 from itertools import permutations
 import math
 
-full_availability = list(permutations([1,2,3,4,5,6,7,8,9]))
+full_availability = set(permutations([1,2,3,4,5,6,7,8,9]))
 #def constraint class
 class Constraint:
     
@@ -10,17 +10,22 @@ class Constraint:
 
     def __init__(self,constraint_num,new=True):
         if(new):
-            self.availability_list= full_availability[:]
+            self.availability_list= full_availability.copy()
             if constraint_num <9:
-                self.cells = [(constraint_num,i) for i in range(9)]
+                self.cells = [9*constraint_num+i for i in range(9)]
+            elif(constraint_num<18):
+                self.cells = [(constraint_num%9)+9*i for i in range(9)]
             else:
-                self.cells = [(i,constraint_num-9) for i in range(9)]
+                self.cells=[27*math.floor((constraint_num%9)/3)+3*(constraint_num%9%3)+i for i in range(3)]+\
+                        [9+27*math.floor((constraint_num%9)/3)+3*(constraint_num%9%3)+i for i in range(3)]+\
+                        [18+27*math.floor((constraint_num%9)/3)+3*(constraint_num%9%3)+i for i in range(3)]
+                
 
         #print(self.cells)
     
     def copy(self):
         temp = Constraint(False)
-        temp.availability_list=self.availability_list[:]
+        temp.availability_list=self.availability_list.copy()
         temp.cells = self.cells
         return temp
 
@@ -31,7 +36,7 @@ class BoardState:
     
     def __init__(self,new = True):
         if(new):
-            self.constraints = [Constraint(i) for i in range(18)]
+            self.constraints = [Constraint(i) for i in range(27)]
 
             self.puzzlelist= []
             puzzle = open("sudokus/s02a.txt")
@@ -75,7 +80,7 @@ def forward_check(board):
                     _forward_check(board.constraints[i],j,cell)
                 if not len(board.constraints[i].availability_list)==1:
                     _forward_check(board.constraints[j+9],i,cell)
-
+'''
 def _propogate(constraint,index,avail):
     newlist=[]
     for option in constraint.availability_list:
@@ -100,6 +105,36 @@ def propogate(board):
     
     if changed:
         return propogate(board)
+'''
+
+def propogate(board):
+    changed = False
+    for constraint in board.constraints:
+        if len(constraint.availability_list)==1:
+            print("skip")
+            continue
+        for other_constraint in board.constraints:
+            for i,cell in enumerate(constraint.cells):
+                for j,other_cell in enumerate(other_constraint.cells):
+                    if cell == other_cell:
+                        break
+                else:
+                    continue
+                #print(j)
+                S = set()
+                for option in constraint.availability_list:
+                    S.add(option[i])
+                #print(S)
+                newlist = set()
+                for option in other_constraint.availability_list:
+                    if(option[j] in S):
+                        newlist.add(option)
+                changed = changed or len(newlist)!=len(other_constraint.availability_list)
+                other_constraint.availability_list=newlist
+    print(changed)
+    if(changed):
+        propogate(board)
+
 #DFS
 def visit(board,index):
     #propogate
@@ -123,8 +158,11 @@ def visit(board,index):
 
 
 board = BoardState()
-forward_check(board)
-print(board.get_availability_list(1))
+#forward_check(board)
+#propogate(board)
+#print([i for i in board.get_availability_list(0)])
+#print(board.get_availability_list(1))
+
 '''
 forward_check(board)
 for i in range(18):
@@ -133,4 +171,5 @@ propogate(board)
 for i in range(18):
     print(len(board.constraints[i].availability_list))
 '''
+#print([u.cells for u in board.constraints])
 print(visit(board,0).puzzlelist)
