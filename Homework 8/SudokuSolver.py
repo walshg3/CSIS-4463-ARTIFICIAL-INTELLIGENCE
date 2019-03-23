@@ -78,34 +78,10 @@ def forward_check(board):
             if cell != 0:
                 if not len(board.constraints[i].availability_list)==1:
                     _forward_check(board.constraints[i],j,cell)
-                if not len(board.constraints[i].availability_list)==1:
                     _forward_check(board.constraints[j+9],i,cell)
-'''
-def _propogate(constraint,index,avail):
-    newlist=[]
-    for option in constraint.availability_list:
-        if option[index] in avail:
-            newlist.append(option)
-    changed = True if len(newlist)!=len(constraint.availability_list) else False
-    constraint.availability_list = newlist
-    return changed
-
-def propogate(board):
-    changed = False
-    for i in range(81):
-        availability = board.get_availability_list(i)
-        row = math.floor(i/9)
-        column = i%9
-        changed = _propogate(board.constraints[row],column,availability) 
-        if len(board.constraints[row].availability_list)==0:
-            return 0
-        changed = _propogate(board.constraints[column+9],row,availability) or changed
-        if len(board.constraints[column+9].availability_list)==0:
-            return 0
-    
-    if changed:
-        return propogate(board)
-'''
+                    _forward_check(board.constraints[(math.floor(i/3)*3)+math.floor(j/3)+18],
+                            (math.floor(i/3)*3)+j%3,
+                            cell)
 
 def propogate(board):
     changed = False
@@ -138,7 +114,7 @@ def propogate(board):
 #DFS
 def visit(board,index):
     #propogate
-    forward_check(board)
+    #forward_check(board)
     if(propogate(board)==0):
         return 0
     #for each value
@@ -151,6 +127,7 @@ def visit(board,index):
         print(value)
         nextboard = board.copy()
         nextboard.puzzlelist[math.floor(index/9)][index%9] = value
+        _forward_check(nextboard.constraints[math.floor(index/9)],index%9,value)
         s = visit(nextboard,index+1)
         if s != 0:
             return s
@@ -158,18 +135,9 @@ def visit(board,index):
 
 
 board = BoardState()
-#forward_check(board)
-#propogate(board)
-#print([i for i in board.get_availability_list(0)])
-#print(board.get_availability_list(1))
-
-'''
-forward_check(board)
-for i in range(18):
-    print(len(board.constraints[i].availability_list))
-propogate(board)
-for i in range(18):
-    print(len(board.constraints[i].availability_list))
-'''
 #print([u.cells for u in board.constraints])
+for i in range(9):
+    for j in range(9):
+        print((math.floor(i/3)*3)+math.floor(j/3))
+forward_check(board)
 print(visit(board,0).puzzlelist)
