@@ -133,7 +133,67 @@ def visit(board,index):
             return s
     return 0
 
+def puzzle_check(puzzle, solution):
+    '''
+    Checks to see if the puzzle is the correct solution
+    Arguments:
+        puzzle:  puzzle to be checked
+        solution: solution file (.txt)
+    Outputs: True or False 
+    '''
+    solutionfile = open("solutions/"+solution+".txt")
+    solutionList = []
+    #head = [next(solutionfile) for x in range(12)]
+    #print(head)
+    for row in solutionfile:
+        #print(row[:22])
+        solutionList.append([cell for cell in row[:22].split()])
+    solutionfile.close()
+    # Start Deleting Line not needed 
+    # Probably can make this nicer
+    del solutionList[0][3]
+    del solutionList[0][6]
+    del solutionList[1][3]
+    del solutionList[1][6]
+    del solutionList[2][3]
+    del solutionList[2][6]
+    del solutionList[3]
+    del solutionList[3][3]
+    del solutionList[3][6]
+    del solutionList[4][3]
+    del solutionList[4][6] 
+    del solutionList[5][3]
+    del solutionList[5][6]
+    del solutionList[6]
+    del solutionList[6][3]
+    del solutionList[6][6]
+    del solutionList[7][3]
+    del solutionList[7][6]
+    del solutionList[8][3]
+    del solutionList[8][6]
+    del solutionList[9]
+    del solutionList[9]
+    del solutionList[9]
+    del solutionList[9]
+    del solutionList[9]
 
+    checklist = []
+    for row in solutionList:
+        for cell in row:
+            checklist.append(cell)
+    print(checklist)
+    
+    return checklist == puzzle
+
+    
+
+
+    
+
+puzzle_check("test", "s01a_s")
+    
+
+'''
 board = BoardState()
 #print([u.cells for u in board.constraints])
 for i in range(9):
@@ -141,3 +201,5 @@ for i in range(9):
         print((math.floor(i/3)*3)+math.floor(j/3))
 forward_check(board)
 print(visit(board,0).puzzlelist)
+'''
+
