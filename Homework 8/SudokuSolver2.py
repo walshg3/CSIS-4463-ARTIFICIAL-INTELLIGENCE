@@ -24,9 +24,9 @@ def make_constraints(constraint_num):
         elif(constraint_num<18):
             return [(constraint_num%9)+9*i for i in range(9)]
         else:
-            return [27*math.floor((constraint_num%9)/3)+3*(constraint_num%9%3)+i for i in range(3)]+\
-                    [9+27*math.floor((constraint_num%9)/3)+3*(constraint_num%9%3)+i for i in range(3)]+\
-                    [18+27*math.floor((constraint_num%9)/3)+3*(constraint_num%9%3)+i for i in range(3)]
+            return [int(27*math.floor((constraint_num%9)/3)+3*(constraint_num%9%3)+i) for i in range(3)]+\
+                    [int(9+27*math.floor((constraint_num%9)/3)+3*(constraint_num%9%3)+i) for i in range(3)]+\
+                    [int(18+27*math.floor((constraint_num%9)/3)+3*(constraint_num%9%3)+i) for i in range(3)]
                 
 constraints = [make_constraints(i) for i in range(27)]
 # global list of constraints
@@ -77,7 +77,8 @@ def find_conflict(board,cell):
 
 def propogate(board,cell):
     """
-
+    limits the availability list of all cells limited by the cell
+    at a given index
     """
    
     for constraint in constraints:
@@ -91,7 +92,7 @@ def propogate(board,cell):
 #DFS
 def visit(board,index):
     """
-
+    DFS assigns values to cells. Backtracks when a constraint is violated
     """
     global counter
     #for each value
@@ -196,9 +197,10 @@ def puzzle_check(puzzle, solution):
             return False
     return True
 
-print("Hello!", "\n", "Please Enter Sudoku puzzle to solve (You can find available Sudoku in the sudokus folder)")
-puzzle_name = input()
-output(solve(puzzle_name))
+if __name__=="__main__":
+    print("Hello!", "\n", "Please Enter Sudoku puzzle to solve (You can find available Sudoku in the sudokus folder)")
+    puzzle_name = input()
+    output(solve(puzzle_name))
 #output(solve("hard"))
 #print(puzzle_check(solve(puzzle_name), puzzle_name))i
 #print("\n",counter)
