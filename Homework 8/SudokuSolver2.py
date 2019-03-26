@@ -155,19 +155,5 @@ def puzzle_check(puzzle, solution):
             return False
     return True
 
-
-    
-
-
-    
-'''
-puzzle_check("test", "s01a_s")
-    
-
-board = BoardState()
-forward_check(board)
-#print([u.cells for u in board.constraints])
-print(visit(board,0).puzzlelist)
-'''
 puzzle_name = input()
 print(puzzle_check(solve(puzzle_name), puzzle_name))
