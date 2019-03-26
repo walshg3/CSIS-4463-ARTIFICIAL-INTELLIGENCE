@@ -155,5 +155,6 @@ def puzzle_check(puzzle, solution):
             return False
     return True
 
-puzzle_name = input()
-print(puzzle_check(solve(puzzle_name), puzzle_name))
+#puzzle_name = input()
+print(solve("hard"))
+#print(puzzle_check(solve(puzzle_name), puzzle_name))
