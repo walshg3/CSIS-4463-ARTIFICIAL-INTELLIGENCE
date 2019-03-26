@@ -2,6 +2,7 @@
 from itertools import permutations
 import math
 
+counter =0 
 def make_constraints(constraint_num):
         if constraint_num <9:
             return [9*constraint_num+i for i in range(9)]
@@ -62,13 +63,16 @@ def propogate(board,cell):
                     board.availability_lists[other_cell].remove(board.puzzlelist[cell])
 #DFS
 def visit(board,index):
+    global counter
+    
     #for each value
     #assign 
     if(index == 81):
         return board
+    
     if index in board.assigned:
-
         return visit(board,index+1)
+
     #print(index)
     #print(board.availability_lists[index])
     #print("\t"+str(board.availability_lists[16]))
@@ -79,6 +83,9 @@ def visit(board,index):
         nextboard = board.copy()
         nextboard.puzzlelist[index] = value
         nextboard.assigned.add(index)
+        
+        counter = counter+1
+
         if(find_conflict(nextboard,index)):
             continue
         propogate(nextboard,index)
@@ -157,4 +164,5 @@ def puzzle_check(puzzle, solution):
 
 #puzzle_name = input()
 print(solve("hard"))
-#print(puzzle_check(solve(puzzle_name), puzzle_name))
+#print(puzzle_check(solve(puzzle_name), puzzle_name))i
+print(counter)
