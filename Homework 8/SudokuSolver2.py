@@ -16,23 +16,11 @@ constraints = [make_constraints(i) for i in range(27)]
 # global list of constraints
 class BoardState:
     
-    def __init__(self,new = True):
+    def __init__(self,puzzle,new = True):
         if(new):
             self.availability_lists = [['1','2','3','4','5','6','7','8','9'] for i in range(81)]
             self.assigned = set()
-            self.puzzlelist= []
-            while(True):
-
-                try:
-                    puzzle = open(input("path: "))
-                    break
-                except:
-                    pass
-
-            for row in puzzle:
-                for cell in row.split():
-                    self.puzzlelist.append(cell)
-            puzzle.close()
+            self.puzzlelist= puzzle
     
     def copy(self):
         temp = BoardState(False)
@@ -99,8 +87,87 @@ def visit(board,index):
             return s
     return 0
 
+def solve(name):
+    puzzlelist = []
+    puzzle = open("sudokus/"+name+".txt")
+
+    for row in puzzle:
+        for cell in row.split():
+            puzzlelist.append(cell)
+    puzzle.close()
+    board=BoardState(puzzlelist)
+    forward_check(board)
+    return visit(board,0).puzzlelist
+    
+
+def puzzle_check(puzzle, solution):
+    '''
+    Checks to see if the puzzle is the correct solution
+    Arguments:
+        puzzle:  puzzle to be checked
+        solution: solution file (.txt)
+    Outputs: True or False 
+    '''
+    solutionfile = open("solutions/"+solution+"_s.txt")
+    solutionList = []
+    #head = [next(solutionfile) for x in range(12)]
+    #print(head)
+    for row in solutionfile:
+        #print(row[:22])
+        solutionList.append([cell for cell in row[:22].split()])
+    solutionfile.close()
+    # Start Deleting Line not needed 
+    # Probably can make this nicer
+    del solutionList[0][3]
+    del solutionList[0][6]
+    del solutionList[1][3]
+    del solutionList[1][6]
+    del solutionList[2][3]
+    del solutionList[2][6]
+    del solutionList[3]
+    del solutionList[3][3]
+    del solutionList[3][6]
+    del solutionList[4][3]
+    del solutionList[4][6] 
+    del solutionList[5][3]
+    del solutionList[5][6]
+    del solutionList[6]
+    del solutionList[6][3]
+    del solutionList[6][6]
+    del solutionList[7][3]
+    del solutionList[7][6]
+    del solutionList[8][3]
+    del solutionList[8][6]
+    del solutionList[9]
+    del solutionList[9]
+    del solutionList[9]
+    del solutionList[9]
+    del solutionList[9]
+
+    checklist = []
+    for row in solutionList:
+        for cell in row:
+            checklist.append(cell)
+    print(checklist)
+    print(solution)
+    for i, item in enumerate(checklist):
+        if puzzle[i] != item:
+            return False
+    return True
+
+
+    
+
+
+    
+'''
+puzzle_check("test", "s01a_s")
+    
 
 board = BoardState()
 forward_check(board)
 #print([u.cells for u in board.constraints])
 print(visit(board,0).puzzlelist)
+'''
+puzzle_name = input()
+print(puzzle_check(solve(puzzle_name), puzzle_name))
