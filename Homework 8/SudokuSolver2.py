@@ -21,7 +21,14 @@ class BoardState:
             self.availability_lists = [['1','2','3','4','5','6','7','8','9'] for i in range(81)]
             self.assigned = set()
             self.puzzlelist= []
-            puzzle = open("sudokus/s02a.txt")
+            while(True):
+
+                try:
+                    puzzle = open(input("path: "))
+                    break
+                except:
+                    pass
+
             for row in puzzle:
                 for cell in row.split():
                     self.puzzlelist.append(cell)
@@ -74,9 +81,9 @@ def visit(board,index):
     if index in board.assigned:
 
         return visit(board,index+1)
-    print(index)
-    print(board.availability_lists[index])
-    print("\t"+str(board.availability_lists[16]))
+    #print(index)
+    #print(board.availability_lists[index])
+    #print("\t"+str(board.availability_lists[16]))
     for value in board.availability_lists[index]:
         #print("-----")
         #print(index)
