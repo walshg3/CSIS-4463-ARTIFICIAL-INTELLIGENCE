@@ -77,9 +77,9 @@ def forward_check(board):
     for i,cell in enumerate(board.puzzle_list):
         if cell != '0':
             board.assigned.add(i)
-            propogate(board,i)
+            propagate(board,i)
 
-def propogate(board,cell):
+def propagate(board,cell):
     """
     limits the availability list of all cells limited by the cell
     at a given index
@@ -107,7 +107,7 @@ def propogate(board,cell):
             print(c)
             if board.puzzle_list[c] == '0':
                 board.puzzle_list[c] = board.availability_lists[c][0]
-            if not propogate(board,c):
+            if not propagate(board,c):
                 return False
     '''
 
@@ -129,7 +129,7 @@ def visit(board,index):
         nextboard.puzzle_list[index] = value
         nextboard.assigned.add(index)
 
-        if (not propogate(nextboard,index)):
+        if (not propagate(nextboard,index)):
             continue
             
         #assign values which have been shown to have one possible value in last propagate call
@@ -137,7 +137,7 @@ def visit(board,index):
             limited_cell = limited.pop()
             nextboard.puzzle_list[limited_cell] = nextboard.availability_lists[limited_cell][0]
             nextboard.assigned.add(limited_cell)
-            if not propogate(nextboard,limited_cell):
+            if not propagate(nextboard,limited_cell):
                 continue
         
         s = visit(nextboard,index+1)
