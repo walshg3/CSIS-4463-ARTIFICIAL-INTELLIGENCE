@@ -1,205 +1,170 @@
 #!/usr/bin/python
-from itertools import permutations
+#   @author Brain Fox and Greg Walsh
+#   ______      _              ______                          _   _____                  _    _       _     _     
+#    ___ \    (_)             |  ___|                        | | |  __ \                | |  | |     | |   | |    
+#  | |_/ /_ __ _  __ _ _ __   | |_ _____  __   __ _ _ __   __| | | |  \/_ __ ___  __ _  | |  | | __ _| |___| |__  
+#  | ___ \ '__| |/ _` | '_ \  |  _/ _ \ \/ /  / _` | '_ \ / _` | | | __| '__/ _ \/ _` | | |/\| |/ _` | / __| '_ \ 
+#  | |_/ / |  | | (_| | | | | | || (_) >  <  | (_| | | | | (_| | | |_\ \ | |  __/ (_| | \  /\  / (_| | \__ \ | | |
+#  \____/|_|  |_|\__,_|_| |_| \_| \___/_/\_\  \__,_|_| |_|\__,_|  \____/_|  \___|\__, |  \/  \/ \__,_|_|___/_| |_|
+#                                                                                 __/ |                           
+#                                                                                |___/                             
 import math
-
-full_availability = set(permutations([1,2,3,4,5,6,7,8,9]))
-#def constraint class
-class Constraint:
-    
-    __slots__=["availability_list","cells"]
-
-    def __init__(self,constraint_num,new=True):
-        if(new):
-            self.availability_list= full_availability.copy()
-            if constraint_num <9:
-                self.cells = [9*constraint_num+i for i in range(9)]
-            elif(constraint_num<18):
-                self.cells = [(constraint_num%9)+9*i for i in range(9)]
-            else:
-                self.cells=[27*math.floor((constraint_num%9)/3)+3*(constraint_num%9%3)+i for i in range(3)]+\
-                        [9+27*math.floor((constraint_num%9)/3)+3*(constraint_num%9%3)+i for i in range(3)]+\
-                        [18+27*math.floor((constraint_num%9)/3)+3*(constraint_num%9%3)+i for i in range(3)]
+import sys
+from timeit import timeit
+from collections import deque
+# Counter used for counting backtracking
+def make_constraints(constraint_num):
+        """
+        Constrains are that of sudoku rules:
+        1-9 in row 
+        1-9 in column
+        1-9 in the 3x3 matrix 
+        """
+        if constraint_num <9:
+            return [9*constraint_num+i for i in range(9)]
+        elif(constraint_num<18):
+            return [(constraint_num%9)+9*i for i in range(9)]
+        else:
+            return [int(27*math.floor((constraint_num%9)/3)+3*(constraint_num%9%3)+i) for i in range(3)]+\
+                    [int(9+27*math.floor((constraint_num%9)/3)+3*(constraint_num%9%3)+i) for i in range(3)]+\
+                    [int(18+27*math.floor((constraint_num%9)/3)+3*(constraint_num%9%3)+i) for i in range(3)]
                 
+# global
+constraints = [make_constraints(i) for i in range(27)]
+limited = deque()
 
-        #print(self.cells)
-    
-    def copy(self):
-        temp = Constraint(False)
-        temp.availability_list=self.availability_list.copy()
-        temp.cells = self.cells
-        return temp
-
-
-
-# global list of constraints
 class BoardState:
     
-    def __init__(self,new = True):
+    def __init__(self,puzzle,new = True):
         if(new):
-            self.constraints = [Constraint(i) for i in range(27)]
-
-            self.puzzlelist= []
-            puzzle = open("sudokus/s02a.txt")
-            for row in puzzle:
-                self.puzzlelist.append([int(cell) for cell in row.split()])
-            self.puzzlelist = self.puzzlelist[:9]
-            puzzle.close()
+            self.availability_lists = [['1','2','3','4','5','6','7','8','9'] for i in range(81)]
+            self.assigned = set()
+            self.puzzle_list= puzzle
     
-    def get_availability_list(self,cell):
-        row = math.floor(cell/9)
-        column = cell%9
-        availability = set()
-        for option in self.constraints[row].availability_list:
-            availability.add(option[column])
-        return availability
-
     def copy(self):
+        """
+        Copies the Boardstates puzzle_list, availability_list, and assigned list
+        """
         temp = BoardState(False)
-        temp.puzzlelist = self.puzzlelist[:]
-        temp.constraints = [i.copy() for i in self.constraints]
+        temp.puzzle_list = self.puzzle_list[:]
+        temp.availability_lists = [alist[:] for alist in self.availability_lists]
+        temp.assigned = self.assigned.copy()
         return temp
 
-#global 2d array for puzzle
-#print(puzzlelist)
-#remove the close file []
-
-#forward checking
-def _forward_check(constraint,index,value):
-    newlist=[]
-    for option in constraint.availability_list:
-        if option[index]==value:
-            #constraint.availability_list.remove(option)
-            newlist.append(option)
-    constraint.availability_list = newlist
 
 def forward_check(board):
-    for i,row in enumerate(board.puzzlelist):
-        for j,cell in enumerate(row):
-            if cell != 0:
-                if not len(board.constraints[i].availability_list)==1:
-                    _forward_check(board.constraints[i],j,cell)
-                    _forward_check(board.constraints[j+9],i,cell)
-                    _forward_check(board.constraints[(math.floor(i/3)*3)+math.floor(j/3)+18],
-                            (math.floor(i/3)*3)+j%3,
-                            cell)
+    """
+    Forward checks the board and adds cell to the assigned list
+    Input: board
+    """
+    for i,cell in enumerate(board.puzzle_list):
+        if cell != '0':
+            board.assigned.add(i)
+            propogate(board,i)
 
-def propogate(board):
-    changed = False
-    for constraint in board.constraints:
-        if len(constraint.availability_list)==1:
-            print("skip")
-            continue
-        for other_constraint in board.constraints:
-            for i,cell in enumerate(constraint.cells):
-                for j,other_cell in enumerate(other_constraint.cells):
-                    if cell == other_cell:
-                        break
-                else:
+def propogate(board,cell):
+    """
+    limits the availability list of all cells limited by the cell
+    at a given index
+    """
+    global limited
+    for constraint in constraints:
+        if cell in constraint:
+            for other_cell in constraint:
+                if other_cell in board.assigned :
                     continue
-                #print(j)
-                S = set()
-                for option in constraint.availability_list:
-                    S.add(option[i])
-                #print(S)
-                newlist = set()
-                for option in other_constraint.availability_list:
-                    if(option[j] in S):
-                        newlist.add(option)
-                changed = changed or len(newlist)!=len(other_constraint.availability_list)
-                other_constraint.availability_list=newlist
-    print(changed)
-    if(changed):
-        propogate(board)
+                #remove assigned value from availability lists
+                if board.puzzle_list[cell] in board.availability_lists[other_cell]:
+                    board.availability_lists[other_cell].remove(board.puzzle_list[cell])
+                    if len(board.availability_lists[other_cell])==0:
+                        #break this leg of DFS if puzzle is unsolvable in current state
+                        limited = deque()
+                        return False
+                    elif len(board.availability_lists[other_cell])==1:
+                        limited.append(other_cell)
+    
+    return True
+    '''if(len(limited)!=0):
+        for c in limited:
+            print(cell)
+            print(c)
+            if board.puzzle_list[c] == '0':
+                board.puzzle_list[c] = board.availability_lists[c][0]
+            if not propogate(board,c):
+                return False
+    '''
 
 #DFS
 def visit(board,index):
-    #propogate
-    #forward_check(board)
-    if(propogate(board)==0):
-        return 0
-    #for each value
-    #assign 
+    """
+    DFS assigns values to cells. Backtracks when a constraint is violated
+    """
     if(index == 81):
         return board
-    for value in board.get_availability_list(index):
-        print("-----")
-        print(index)
-        print(value)
+
+    global limited
+
+    if index in board.assigned:
+        return visit(board,index+1)
+
+    for value in board.availability_lists[index]:
         nextboard = board.copy()
-        nextboard.puzzlelist[math.floor(index/9)][index%9] = value
-        _forward_check(nextboard.constraints[math.floor(index/9)],index%9,value)
+        nextboard.puzzle_list[index] = value
+        nextboard.assigned.add(index)
+
+        if (not propogate(nextboard,index)):
+            continue
+            
+        #assign values which have been shown to have one possible value in last propagate call
+        while(len(limited)>0):
+            limited_cell = limited.pop()
+            nextboard.puzzle_list[limited_cell] = nextboard.availability_lists[limited_cell][0]
+            nextboard.assigned.add(limited_cell)
+            if not propogate(nextboard,limited_cell):
+                continue
+        
         s = visit(nextboard,index+1)
         if s != 0:
             return s
     return 0
 
-def puzzle_check(puzzle, solution):
+def solve(name):
+    """
+    Solves the Puzzle using forward_check() and visit()
+    Input: name of puzzle from sudokus (Without ".txt")
+    returns list of solved Puzzle
+    """
+    puzzle_list = []
+    try :
+        puzzle = open(name)
+    except:
+        print("could not find that file")
+        exit()
+    for row in puzzle:
+        for cell in row.split():
+            puzzle_list.append(cell)
+    puzzle.close()
+    board=BoardState(puzzle_list)
+    forward_check(board)
+    return visit(board,0).puzzle_list
+
+def output(puzzle):
     '''
-    Checks to see if the puzzle is the correct solution
-    Arguments:
-        puzzle:  puzzle to be checked
-        solution: solution file (.txt)
-    Outputs: True or False 
+    Outputs puzzle in 9x9 format
+    Input: Puzzle (Solved Puzzle)
     '''
-    solutionfile = open("solutions/"+solution+".txt")
-    solutionList = []
-    #head = [next(solutionfile) for x in range(12)]
-    #print(head)
-    for row in solutionfile:
-        #print(row[:22])
-        solutionList.append([cell for cell in row[:22].split()])
-    solutionfile.close()
-    # Start Deleting Line not needed 
-    # Probably can make this nicer
-    del solutionList[0][3]
-    del solutionList[0][6]
-    del solutionList[1][3]
-    del solutionList[1][6]
-    del solutionList[2][3]
-    del solutionList[2][6]
-    del solutionList[3]
-    del solutionList[3][3]
-    del solutionList[3][6]
-    del solutionList[4][3]
-    del solutionList[4][6] 
-    del solutionList[5][3]
-    del solutionList[5][6]
-    del solutionList[6]
-    del solutionList[6][3]
-    del solutionList[6][6]
-    del solutionList[7][3]
-    del solutionList[7][6]
-    del solutionList[8][3]
-    del solutionList[8][6]
-    del solutionList[9]
-    del solutionList[9]
-    del solutionList[9]
-    del solutionList[9]
-    del solutionList[9]
+    n = m = 0
+    while m < len(puzzle):
+        m = m+9
+        print(" ".join(puzzle[n:m]))
+        n = m
 
-    checklist = []
-    for row in solutionList:
-        for cell in row:
-            checklist.append(cell)
-    print(checklist)
+if __name__=="__main__":
+    if(len(sys.argv)==1):
+        print("Hello!", "\n", "Please enter path to Sudoku puzzle to solve (You can find available Sudoku files in the sudokus folder)")
+        puzzle_name = input()
+    else:
+        puzzle_name = sys.argv[1]
+    t = timeit(lambda : output(solve(puzzle_name)),number =1)
+    print("\nTime taken to solve: "+ str(t))
     
-    return checklist == puzzle
-
-    
-
-
-    
-
-puzzle_check("test", "s01a_s")
-    
-
-'''
-board = BoardState()
-#print([u.cells for u in board.constraints])
-for i in range(9):
-    for j in range(9):
-        print((math.floor(i/3)*3)+math.floor(j/3))
-forward_check(board)
-print(visit(board,0).puzzlelist)
-'''
-
