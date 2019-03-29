@@ -8,10 +8,11 @@
 #  \____/|_|  |_|\__,_|_| |_| \_| \___/_/\_\  \__,_|_| |_|\__,_|  \____/_|  \___|\__, |  \/  \/ \__,_|_|___/_| |_|
 #                                                                                 __/ |                           
 #                                                                                |___/                             
-from itertools import permutations
 import math
+import sys
+from timeit import timeit
+from collections import deque
 # Counter used for counting backtracking
-counter =0 
 def make_constraints(constraint_num):
         """
         Constrains are that of sudoku rules:
@@ -61,6 +62,8 @@ def forward_check(board):
 
 def find_conflict(board,cell):
     """
+    Deprecated
+
     locates conflicts in constraints
     """
     for constraint in constraints:
@@ -75,12 +78,13 @@ def find_conflict(board,cell):
                     return True
     return False
 
+limited = deque()
 def propogate(board,cell):
     """
     limits the availability list of all cells limited by the cell
     at a given index
     """
-   
+    global limited
     for constraint in constraints:
         if cell in constraint:
             for other_cell in constraint:
@@ -89,17 +93,36 @@ def propogate(board,cell):
                 #remove assigned value from availability lists
                 if board.puzzlelist[cell] in board.availability_lists[other_cell]:
                     board.availability_lists[other_cell].remove(board.puzzlelist[cell])
+                    if len(board.availability_lists[other_cell])==0:
+                        #break this leg of DFS if puzzle is unsolvable in current state
+                        limited = deque()
+                        return False
+                    elif len(board.availability_lists[other_cell])==1:
+                        limited.append(other_cell)
+    
+    return True
+    '''if(len(limited)!=0):
+        for c in limited:
+            print(cell)
+            print(c)
+            if board.puzzlelist[c] == '0':
+                board.puzzlelist[c] = board.availability_lists[c][0]
+            if not propogate(board,c):
+                return False
+    '''
+
 #DFS
 def visit(board,index):
     """
     DFS assigns values to cells. Backtracks when a constraint is violated
     """
-    global counter
     #for each value
     #assign 
     if(index == 81):
         return board
-    
+
+    global limited
+
     if index in board.assigned:
         return visit(board,index+1)
 
@@ -107,12 +130,20 @@ def visit(board,index):
         nextboard = board.copy()
         nextboard.puzzlelist[index] = value
         nextboard.assigned.add(index)
-        
-        counter = counter+1
 
-        if(find_conflict(nextboard,index)):
+        #if(find_conflict(nextboard,index)):
+        #    continue
+        if (not propogate(nextboard,index)):
             continue
-        propogate(nextboard,index)
+            
+        
+        #while(len(limited)>0):
+        #    next_cell = limited.pop()
+        #    print(next_cell)
+        #    nextboard.puzzlelist[next_cell] = nextboard.availability_lists[next_cell][0]
+            #if not propogate(nextboard,next_cell):
+            #    continue
+        
         s = visit(nextboard,index+1)
         if s != 0:
             return s
@@ -125,8 +156,11 @@ def solve(name):
     returns list of solved Puzzle
     """
     puzzlelist = []
-    puzzle = open("sudokus/"+name+".txt")
-
+    try :
+        puzzle = open(name)
+    except:
+        print("could not find that file")
+        exit()
     for row in puzzle:
         for cell in row.split():
             puzzlelist.append(cell)
@@ -198,9 +232,9 @@ def puzzle_check(puzzle, solution):
     return True
 
 if __name__=="__main__":
-    print("Hello!", "\n", "Please Enter Sudoku puzzle to solve (You can find available Sudoku in the sudokus folder)")
-    puzzle_name = input()
-    output(solve(puzzle_name))
-#output(solve("hard"))
-#print(puzzle_check(solve(puzzle_name), puzzle_name))i
-#print("\n",counter)
+    if(len(sys.argv)==1):
+        print("Hello!", "\n", "Please enter path to Sudoku puzzle to solve (You can find available Sudoku files in the sudokus folder)")
+        puzzle_name = input()
+    else:
+        puzzle_name = sys.argv[1]
+    print(timeit(lambda : solve(puzzle_name),number =1))
