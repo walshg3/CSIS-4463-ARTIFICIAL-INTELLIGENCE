@@ -1,6 +1,6 @@
 #!/usr/bin/python
 #   @author Brain Fox and Greg Walsh
-#   ______      _              ______                          _   _____                  _    _       _     _     
+#  ______      _              ______                          _   _____                  _    _       _     _     
 #    ___ \    (_)             |  ___|                        | | |  __ \                | |  | |     | |   | |    
 #  | |_/ /_ __ _  __ _ _ __   | |_ _____  __   __ _ _ __   __| | | |  \/_ __ ___  __ _  | |  | | __ _| |___| |__  
 #  | ___ \ '__| |/ _` | '_ \  |  _/ _ \ \/ /  / _` | '_ \ / _` | | | __| '__/ _ \/ _` | | |/\| |/ _` | / __| '_ \ 
@@ -8,6 +8,23 @@
 #  \____/|_|  |_|\__,_|_| |_| \_| \___/_/\_\  \__,_|_| |_|\__,_|  \____/_|  \___|\__, |  \/  \/ \__,_|_|___/_| |_|
 #                                                                                 __/ |                           
 #                                                                                |___/                             
+# DFS visit:
+#   for each cell sequentially:
+#       
+#       if cell has been assigned skip
+#       for values in cell's availability list:
+#
+#           assign cell
+#           run propagation
+#           if any cell has availabilty list of length 0
+#               backtrack
+#           
+#           assign all cells with availability list of length 1
+#           propagate on those cells
+#           if any cell has availabilty list of length 0
+#               backtrack
+#           
+#   
 import math
 import sys
 from timeit import timeit
