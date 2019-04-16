@@ -53,6 +53,17 @@ def generate_random_tour(city_list):
         perm[i],perm[j] = perm[j],perm[i]
     return perm
 
+def generate_random_neighbor(city_list):
+
+    neighbor = list(city_list)
+    j = randrange(len(neighbor))
+    i = j
+    while i == j :
+        i = randrange(len(neighbor))
+
+    neighbor[i],neighbor[j] = neighbor[j],neighbor[i]
+
+    return neighbor
 
 def get_tour_distance(tour_list):
     total_dist = 0
@@ -62,13 +73,29 @@ def get_tour_distance(tour_list):
         last_city = city
     return total_dist
 
+def search(city_list):
+    tour = generate_random_tour(city_list)
+    tour_dist = get_tour_distance(tour)
+    count = 0
+    while(count<100):
+        count = count+1
+        neighbor = generate_random_neighbor(tour)
+        neighbor_dist = get_tour_distance(neighbor) 
+        if(neighbor_dist < tour_dist):
+            tour = neighbor
+            tour_dist = neighbor_dist
+            count = 0
+
+    return tour
+
 
 if __name__=="__main__":
     if(len(sys.argv)<2):
         exit()
     city_list = parse_tsp_data(sys.argv[1])
-    print(euc_distance(city_list[0],city_list[1]))
-    print(get_tour_distance(city_list))
-    print(get_tour_distance(generate_random_tour(city_list)))
+    #print(euc_distance(city_list[0],city_list[1]))
+    #print(get_tour_distance(city_list))
+    #print(get_tour_distance(generate_random_tour(city_list)))
     
+    print(get_tour_distance(search(city_list)))
 
