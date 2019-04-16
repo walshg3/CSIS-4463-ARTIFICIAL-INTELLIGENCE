@@ -77,7 +77,8 @@ def search(city_list):
     tour = generate_random_tour(city_list)
     tour_dist = get_tour_distance(tour)
     count = 0
-    while(count<100):
+    #results were considerably bigger with 10x and slightly smaller with 1000x
+    while(count<200*len(tour)):
         count = count+1
         neighbor = generate_random_neighbor(tour)
         neighbor_dist = get_tour_distance(neighbor) 
