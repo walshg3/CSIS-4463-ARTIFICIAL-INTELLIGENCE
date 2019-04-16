@@ -8,5 +8,9 @@
 #  \____/|_|  |_|\__,_|_| |_| \_| \___/_/\_\  \__,_|_| |_|\__,_|  \____/_|  \___|\__, |  \/  \/ \__,_|_|___/_| |_|
 #                                                                                 __/ |                           
 #                                                                                |___/                             
-#
+#Local Search with Simulated Annealing
 
+import math
+import sys
+
+def parseGraph:
