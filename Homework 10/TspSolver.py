@@ -73,40 +73,20 @@ def get_tour_distance(tour_list):
         last_city = city
     return total_dist
 
-class tour_neighbors:
-
-    def __init__(self,tour):
-        self.tour = tour
-        
-
-    def __iter__(self):
-        self.left = 0
-        self.right = 1
-        return self
-
-    def __next__(self):
-        if (self.left == len(self.tour)-1):
-            raise StopIteration
-        neighbor = list(self.tour)
-        neighbor[self.left],neighbor[self.right] = neighbor[self.right],neighbor[self.left]
-        if self.right < len(self.tour)-1:
-            self.right = self.right +1
-        else:
-            self.left = self.left + 1
-            self.right = self.left + 1
-
-        return neighbor
 
 
-
-
-def search(city_list):
-    tour = generate_random_tour(city_list)
-    tour_dist = get_tour_distance(tour)
-    count = 0
-    #results were considerably bigger with 10x and slightly smaller with 1000x
+def search(city_list, runtimes=10):
     lowest = math.inf
-    for i in range(100):
+    tour_list = [] 
+    """
+    Need to Ask Cici about making the range as a 2nd input in the program to run for x iterations
+    """
+    for i in range(1):
+        tour = generate_random_tour(city_list)
+        tour_dist = get_tour_distance(tour)
+        count = 0
+    #results were considerably bigger with 10x and slightly smaller with 1000x
+
         while(count<5000):
             count = count+1
             neighbor = generate_random_neighbor(tour)
@@ -114,25 +94,22 @@ def search(city_list):
             if(neighbor_dist < tour_dist):
                 tour = neighbor
                 tour_dist = neighbor_dist
+                
                 count = 0
-        print(tour_dist)
+    
         if tour_dist < lowest:
             lowest = tour_dist
+            tour_list.append(tour)
+            #print(lowest)
+            lowest_tour = tour
+        #print(i, tour_dist)
+    #print(tour_list)
+    #res_list = [x[0] for x in lowest_tour]
+    #print(res_list)
 
-    '''
-    while(True):
-        for neighbor in tour_neighbors(tour):
-            neighbor_dist = get_tour_distance(neighbor) 
-            if (neighbor_dist < tour_dist):
-                print(neighbor_dist)
-                tour = neighbor
-                tour_dist = neighbor_dist
-                break
-        else:
-            break
-    '''
+    return lowest_tour
 
-    return tour
+
 
 
 if __name__=="__main__":
@@ -143,5 +120,17 @@ if __name__=="__main__":
     #print(get_tour_distance(city_list))
     #print(get_tour_distance(generate_random_tour(city_list)))
     
-    print(get_tour_distance(search(city_list)))
+    #print(get_tour_distance(search(city_list)))
+
+    x = search(city_list, sys.argv[2] if len(sys.argv)>2 else 10 )
+
+    print(get_tour_distance(x))
+    #(print((x[0], '\t')) for x in x)
+
+    for city in x:
+        print(city[0], end=' ')
+    print()
+
+
+    
 

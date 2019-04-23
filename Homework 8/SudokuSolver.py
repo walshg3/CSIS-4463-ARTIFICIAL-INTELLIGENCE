@@ -184,4 +184,6 @@ if __name__=="__main__":
         puzzle_name = sys.argv[1]
     t = timeit(lambda : output(solve(puzzle_name)),number =1)
     print("\nTime taken to solve: "+ str(t))
+
+    
     
