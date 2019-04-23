@@ -54,6 +54,9 @@ def generate_random_tour(city_list):
     return perm
 
 def generate_random_neighbor(city_list):
+    """
+    Generates a random neighbor using a slight variation in the city list 
+    """
 
     neighbor = list(city_list)
     j = randrange(len(neighbor))
@@ -66,6 +69,10 @@ def generate_random_neighbor(city_list):
     return neighbor
 
 def get_tour_distance(tour_list):
+    """
+    Gets tour distance using euc_distance of each city
+    returns a total distance of tour 
+    """
     total_dist = 0
     last_city = tour_list[-1]
     for city in tour_list:
@@ -125,7 +132,6 @@ if __name__=="__main__":
     x = search(city_list, sys.argv[2] if len(sys.argv)>2 else 10 )
 
     print(get_tour_distance(x))
-    #(print((x[0], '\t')) for x in x)
 
     for city in x:
         print(city[0], end=' ')
