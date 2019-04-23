@@ -73,19 +73,64 @@ def get_tour_distance(tour_list):
         last_city = city
     return total_dist
 
+class tour_neighbors:
+
+    def __init__(self,tour):
+        self.tour = tour
+        
+
+    def __iter__(self):
+        self.left = 0
+        self.right = 1
+        return self
+
+    def __next__(self):
+        if (self.left == len(self.tour)-1):
+            raise StopIteration
+        neighbor = list(self.tour)
+        neighbor[self.left],neighbor[self.right] = neighbor[self.right],neighbor[self.left]
+        if self.right < len(self.tour)-1:
+            self.right = self.right +1
+        else:
+            self.left = self.left + 1
+            self.right = self.left + 1
+
+        return neighbor
+
+
+
+
 def search(city_list):
     tour = generate_random_tour(city_list)
     tour_dist = get_tour_distance(tour)
     count = 0
     #results were considerably bigger with 10x and slightly smaller with 1000x
-    while(count<200*len(tour)):
-        count = count+1
-        neighbor = generate_random_neighbor(tour)
-        neighbor_dist = get_tour_distance(neighbor) 
-        if(neighbor_dist < tour_dist):
-            tour = neighbor
-            tour_dist = neighbor_dist
-            count = 0
+    lowest = math.inf
+    for i in range(100):
+        while(count<5000):
+            count = count+1
+            neighbor = generate_random_neighbor(tour)
+            neighbor_dist = get_tour_distance(neighbor) 
+            if(neighbor_dist < tour_dist):
+                tour = neighbor
+                tour_dist = neighbor_dist
+                count = 0
+        print(tour_dist)
+        if tour_dist < lowest:
+            lowest = tour_dist
+
+    '''
+    while(True):
+        for neighbor in tour_neighbors(tour):
+            neighbor_dist = get_tour_distance(neighbor) 
+            if (neighbor_dist < tour_dist):
+                print(neighbor_dist)
+                tour = neighbor
+                tour_dist = neighbor_dist
+                break
+        else:
+            break
+    '''
 
     return tour
 
