@@ -8,7 +8,7 @@
 #  \____/|_|  |_|\__,_|_| |_| \_| \___/_/\_\  \__,_|_| |_|\__,_|  \____/_|  \___|\__, |  \/  \/ \__,_|_|___/_| |_|
 #                                                                                 __/ |                           
 #                                                                                |___/                             
-#Local Search with Simulated Annealing
+#Local Search
 
 import math
 import sys
@@ -82,26 +82,25 @@ def get_tour_distance(tour_list):
 
 
 
-def search(city_list, runtimes=10):
+def search(city_list, runtimes):
     lowest = math.inf
     tour_list = [] 
     """
     Need to Ask Cici about making the range as a 2nd input in the program to run for x iterations
     """
+    #print("runtimes",runtimes)
     for i in range(1):
         tour = generate_random_tour(city_list)
         tour_dist = get_tour_distance(tour)
         count = 0
-    #results were considerably bigger with 10x and slightly smaller with 1000x
-
-        while(count<5000):
+    #results were considerably bigger with 10x Runtimes and slightly smaller with 1000x Runtimes
+        while(count<int(runtimes)):
             count = count+1
             neighbor = generate_random_neighbor(tour)
             neighbor_dist = get_tour_distance(neighbor) 
             if(neighbor_dist < tour_dist):
                 tour = neighbor
                 tour_dist = neighbor_dist
-                
                 count = 0
     
         if tour_dist < lowest:
@@ -109,10 +108,6 @@ def search(city_list, runtimes=10):
             tour_list.append(tour)
             #print(lowest)
             lowest_tour = tour
-        #print(i, tour_dist)
-    #print(tour_list)
-    #res_list = [x[0] for x in lowest_tour]
-    #print(res_list)
 
     return lowest_tour
 
@@ -123,16 +118,8 @@ if __name__=="__main__":
     if(len(sys.argv)<2):
         exit()
     city_list = parse_tsp_data(sys.argv[1])
-    #print(euc_distance(city_list[0],city_list[1]))
-    #print(get_tour_distance(city_list))
-    #print(get_tour_distance(generate_random_tour(city_list)))
-    
-    #print(get_tour_distance(search(city_list)))
-
-    x = search(city_list, sys.argv[2] if len(sys.argv)>2 else 10 )
-
+    x = search(city_list, sys.argv[2] if len(sys.argv)>2 else 10)
     print(get_tour_distance(x))
-
     for city in x:
         print(city[0], end=' ')
     print()
