@@ -83,12 +83,14 @@ def get_tour_distance(tour_list):
 
 
 def search(city_list, runtimes):
+    """
+    TSP Search runs a random neighbor generation and gets the tour distance. 
+    runtimes - how many times to run the search
+    city_list - what city to search
+    returns the lowest tour distance of all searches 
+    """
     lowest = math.inf
     tour_list = [] 
-    """
-    Need to Ask Cici about making the range as a 2nd input in the program to run for x iterations
-    """
-    #print("runtimes",runtimes)
     for i in range(1):
         tour = generate_random_tour(city_list)
         tour_dist = get_tour_distance(tour)
