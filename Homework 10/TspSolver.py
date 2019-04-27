@@ -13,6 +13,7 @@
 import math
 import sys
 from random import randrange
+import os
 def parse_tsp_data(path):
     '''
     returns list of cities as a 3-tuple in the form (city id,x,y) 
@@ -92,28 +93,38 @@ def search(city_list, runtimes, neighbor_num):
     """
     lowest = math.inf
     tour_list = []
-    for i in range(int(runtimes)):
-        tour = generate_random_tour(city_list)
-        tour_dist = get_tour_distance(tour)
-        count = 0
-    #results were considerably bigger with 10x Runtimes and slightly smaller with 1000x Runtimes
-        while(count<int(neighbor_num)):
-            count = count+1
-            neighbor = generate_random_neighbor(tour)
-            neighbor_dist = get_tour_distance(neighbor) 
-            if(neighbor_dist < tour_dist):
-                tour = neighbor
-                tour_dist = neighbor_dist
-                count = 0
+    try:
+        for i in range(int(runtimes)):
+            tour = generate_random_tour(city_list)
+            tour_dist = get_tour_distance(tour)
+            count = 0
+            #results were considerably bigger with 10x Runtimes and slightly smaller with 1000x Runtimes
+            while(count<int(neighbor_num)):
+                count = count+1
+                neighbor = generate_random_neighbor(tour)
+                neighbor_dist = get_tour_distance(neighbor) 
+                if(neighbor_dist < tour_dist):
+                    tour = neighbor
+                    tour_dist = neighbor_dist
+                    count = 0
     
-        if tour_dist < lowest:
-            lowest = tour_dist
-            tour_list.append(tour)
-            #print(lowest)
-            lowest_tour = tour
+            if tour_dist < lowest:
+                lowest = tour_dist
+                tour_list.append(tour)
+                #print(lowest)
+                lowest_tour = tour
 
-    return lowest_tour
-
+        return lowest_tour
+    except KeyboardInterrupt:
+        print()
+        print(lowest)
+        for city in lowest_tour:
+            print(city[0], end=' ')
+        print()
+        try:
+            sys.exit(0)
+        except SystemExit:
+            os._exit(0)
 
 
 
