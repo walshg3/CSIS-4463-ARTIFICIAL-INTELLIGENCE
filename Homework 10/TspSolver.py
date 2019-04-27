@@ -83,7 +83,7 @@ def get_tour_distance(tour_list):
 
 
 
-def search(city_list, runtimes, neighbor_num):
+def search(city_list, runtimes=10, neighbor_num=1000):
     """
     TSP Search runs a random neighbor generation and gets the tour distance. 
     runtimes - how many times to run the search
@@ -132,7 +132,7 @@ if __name__=="__main__":
     if(len(sys.argv)<2):
         exit()
     city_list = parse_tsp_data(sys.argv[1])
-    x = search(city_list, sys.argv[2] if len(sys.argv)>2 else 10, sys.argv[3] if len(sys.argv)>3 else 100)
+    x = search(city_list, sys.argv[2] if len(sys.argv)>2 else 10, sys.argv[3] if len(sys.argv)>3 else 1000)
     print(get_tour_distance(x))
     for city in x:
         print(city[0], end=' ')
