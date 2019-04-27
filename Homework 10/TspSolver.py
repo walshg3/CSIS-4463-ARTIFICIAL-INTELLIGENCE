@@ -91,12 +91,12 @@ def search(city_list, runtimes):
     """
     lowest = math.inf
     tour_list = [] 
-    for i in range(1):
+    for i in range(int(runtimes)):
         tour = generate_random_tour(city_list)
         tour_dist = get_tour_distance(tour)
         count = 0
     #results were considerably bigger with 10x Runtimes and slightly smaller with 1000x Runtimes
-        while(count<int(runtimes)):
+        while(count<1000):
             count = count+1
             neighbor = generate_random_neighbor(tour)
             neighbor_dist = get_tour_distance(neighbor) 
