@@ -126,8 +126,6 @@ def search(city_list, runtimes=10, neighbor_num=1000):
         except SystemExit:
             os._exit(0)
 
-
-
 if __name__=="__main__":
     if(len(sys.argv)<2):
         exit()
@@ -137,7 +135,3 @@ if __name__=="__main__":
     for city in x:
         print(city[0], end=' ')
     print()
-
-
-    
-
